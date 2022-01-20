@@ -1,6 +1,6 @@
-local window = require('cheat.window')
+local entry = require('cheat.entry')
 
 return {
-  window = window
+  entry = entry
 }
 
