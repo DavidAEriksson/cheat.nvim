@@ -1,5 +1,4 @@
 local curl = require('cheat.curl')
-local popup = require('plenary.popup')
 
 local M = {}
 
@@ -25,12 +24,15 @@ end
 M.create_window = function()
   local query_result = curl.query(curl.get_lang(), curl.get_query())
 
-  print("?", query_result)
-  -- local w_opts = M.window_opts()
-  -- local w_buf = vim.api.nvim_create_buf(false, true)
-  -- vim.api.nvim_buf_set_keymap(w_buf, "n", "q", ":bd<CR>", { noremap = true })
-  -- vim.api.nvim_buf_set_lines(w_buf, 0, -1, false, t)
-  -- local w_win = vim.api.nvim_open_win(w_buf, true, w_opts)
+  local w_opts = M.window_opts()
+  local w_buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_keymap(w_buf, "n", "q", ":bd<CR>", { noremap = true })
+
+  for line in query_result:gmatch("([^\r\n]*)[\r\n]?") do
+    vim.api.nvim_buf_set_lines(w_buf, 0, 0, false,  {line})
+  end
+
+  local w_win = vim.api.nvim_open_win(w_buf, true, w_opts)
 
 end
 
