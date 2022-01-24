@@ -15,6 +15,7 @@ end
 M.query = function(lang, lang_query)
   local res = curl.get("https://cheat.sh/" .. lang .. "/" .. lang_query)
   print(vim.inspect(res))
+  return res
 end
 
 return M
