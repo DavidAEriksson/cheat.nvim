@@ -6,6 +6,12 @@ local M = {}
 Cheat_win_id = nil
 Cheat_buf = nil
 
+local function center(str)
+  local width = vim.api.nvim_win_get_width(0)
+  local shift = math.floor(width / 2) - math.floor(string.len(str) / 2)
+  return string.rep(' ', shift) .. str
+end
+
 M.size_opts = function()
   local w_width = math.floor(vim.o.columns * 0.7)
   local w_height = math.floor(vim.o.lines * 0.7)
@@ -34,7 +40,9 @@ end
 
 
 M.create_window = function()
-  local query_result = curl.query(curl.get_lang(), curl.get_query())
+  local q_lang = curl.get_lang()
+  local q_query = curl.get_query()
+  local query_result = curl.query(q_lang, q_query)
 
   local borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
   local bufnr = vim.api.nvim_create_buf(false, false)
@@ -49,8 +57,15 @@ M.create_window = function()
     borderchars = borderchars,
   })
 
+  vim.api.nvim_buf_set_lines(bufnr, 0,0, false, { center([[Question:]] .. q_query) })
+  vim.cmd([[
+    hi def link QuestionSubHeader CursorColumn
+  ]])
+
+  vim.api.nvim_buf_add_highlight(bufnr, -1, 'QuestionSubHeader', 0, 0, -1)
+
   for line in query_result:gmatch("([^\r\n]*)[\r\n]?") do
-    vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { line })
+    vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { line })
   end
 
   vim.api.nvim_win_set_option(
