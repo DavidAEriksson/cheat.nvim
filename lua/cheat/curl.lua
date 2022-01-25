@@ -4,7 +4,7 @@ local filetype = require "plenary.filetype"
 local M = {}
 
 M.get_lang = function ()
-  local lang = vim.fn.input("[Cheat.nvim] Select language, leave blank for current file: ", "")
+  local lang = vim.fn.input("[Cheat.nvim] Select language, leave blank for current file [" .. vim.fn.expand('%:t') .. "]:", "")
   if lang == nil or lang == '' then
     lang = filetype.detect(vim.fn.expand('%:t'))
   end

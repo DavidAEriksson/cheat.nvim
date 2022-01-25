@@ -1,12 +1,10 @@
 local curl = require('cheat.curl')
+local popup = require('plenary.popup')
 
 local M = {}
 
-local function center_header(str)
-  local width = vim.api.nvim_win_get_width(0)
-  local shift = math.floor(width / 2) - math.floor(string.len(str) / 2)
-  return string.rep(' ', shift) .. str
-end
+Cheat_win_id = nil
+Cheat_buf = nil
 
 M.size_opts = function()
   local w_width = math.floor(vim.o.columns * 0.7)
@@ -34,51 +32,34 @@ local function window_opts()
   }
 end
 
-local function border_opts()
-  return  {
-    relative = "editor",
-    row = M.size_opts()[4] - 1,
-    col = M.size_opts()[3] - 1,
-    width = M.size_opts()[1] + 2,
-    height = M.size_opts()[2] + 2,
-    style = "minimal",
-  }
-end
-
-local function create_border()
-  local b_buf = vim.api.nvim_create_buf(false, true)
-
-  local border_lines = { '╭' .. string.rep('─', M.size_opts()[1]) .. '╮' }
-  local middle_line = '│' .. string.rep(' ', M.size_opts()[1]) .. '│'
-  for i=1, M.size_opts()[2] do
-    table.insert(border_lines, middle_line)
-  end
-  table.insert(border_lines, '╰' .. string.rep('─', M.size_opts()[1]) .. '╯')
-  vim.api.nvim_buf_set_lines(b_buf, 0, -1, false, border_lines)
-
-  local b_win = vim.api.nvim_open_win(b_buf, true, border_opts())
-  vim.api.nvim_buf_set_keymap(0, "n", "q", ":bd<CR>", { noremap = true })
-  vim.api.nvim_command('au BufWipeout <buffer> exe "silent bwipeout! "'..b_buf)
-
-end
 
 M.create_window = function()
   local query_result = curl.query(curl.get_lang(), curl.get_query())
 
-  local w_buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_keymap(w_buf, "n", "q", ":bd<CR>", { noremap = true })
+  local borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
+  local bufnr = vim.api.nvim_create_buf(false, false)
+
+  local Cheat_win_id, win = popup.create(bufnr, {
+    title = "Cheat.nvim",
+    highlight = "CheatWindow",
+    line = window_opts().row,
+    col = window_opts().col,
+    minwidth = window_opts().width,
+    minheight = window_opts().height,
+    borderchars = borderchars,
+  })
 
   for line in query_result:gmatch("([^\r\n]*)[\r\n]?") do
-    vim.api.nvim_buf_set_lines(w_buf, 0, 0, false, { line })
+    vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, { line })
   end
 
-  create_border()
-  local w_win = vim.api.nvim_open_win(w_buf, true, window_opts())
-  -- vim.api.nvim_buf_set_lines(w_buf, 0, -1, false, { center_header('Cheat.nvim'), '', ''})
-  -- vim.cmd([[
-  --   hi def link CheatHeader       Identifier
-  -- ]])
-  -- vim.api.nvim_buf_add_highlight(w_buf, -1, 'CheatHeader', 0, 0, -1)
+  vim.api.nvim_win_set_option(
+      win.border.win_id,
+      "winhl",
+      "Normal:CheatBorder"
+  )
+
+  vim.api.nvim_buf_set_keymap(bufnr, "n", "q", ":bd!<CR>", { noremap=true, silent=true })
 end
 
 return M
