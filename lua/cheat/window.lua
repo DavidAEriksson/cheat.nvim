@@ -69,13 +69,16 @@ M.create_window = function()
   vim.api.nvim_buf_set_keymap(w_buf, "n", "q", ":bd<CR>", { noremap = true })
 
   for line in query_result:gmatch("([^\r\n]*)[\r\n]?") do
-    vim.api.nvim_buf_set_lines(w_buf, 0, 0, false,  {line})
+    vim.api.nvim_buf_set_lines(w_buf, 0, 0, false, { line })
   end
 
-  local w_win = vim.api.nvim_open_win(w_buf, true, window_opts())
   create_border()
-  vim.api.nvim_buf_set_lines(w_buf, 0, -1, false, { center_header('Cheat.nvim'), '', ''})
-  vim.api.nvim_buf_add_highlight(w_buf, -1, 'CheatHeader', 0, 0, -1)
+  local w_win = vim.api.nvim_open_win(w_buf, true, window_opts())
+  -- vim.api.nvim_buf_set_lines(w_buf, 0, -1, false, { center_header('Cheat.nvim'), '', ''})
+  -- vim.cmd([[
+  --   hi def link CheatHeader       Identifier
+  -- ]])
+  -- vim.api.nvim_buf_add_highlight(w_buf, -1, 'CheatHeader', 0, 0, -1)
 end
 
 return M
