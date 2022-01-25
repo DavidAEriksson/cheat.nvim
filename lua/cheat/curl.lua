@@ -17,7 +17,7 @@ M.get_query = function ()
 end
 
 M.query = function(lang, lang_query)
-  local res = curl.get("https://cheat.sh/" .. lang .. "/" .. lang_query .. "\\?QT")
+  local res = curl.get("https://cheat.sh/" .. lang .. "/" .. lang_query .. "\\?T")
   return res.body
 end
 

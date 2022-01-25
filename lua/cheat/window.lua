@@ -60,6 +60,7 @@ M.create_window = function()
   )
 
   vim.api.nvim_buf_set_keymap(bufnr, "n", "q", ":bd!<CR>", { noremap=true, silent=true })
+  vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
 end
 
 return M
