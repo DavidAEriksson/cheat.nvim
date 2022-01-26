@@ -40,9 +40,10 @@ end
 
 
 M.create_window = function()
+  -- maybe move these if we want to redraw the window at some point
   local q_lang = curl.get_lang()
   local q_query = curl.get_query()
-  local query_result = curl.query(q_lang, q_query)
+  local query_result = curl.query(q_lang, q_query) -- TODO: question option from config
 
   local borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
   local bufnr = vim.api.nvim_create_buf(false, false)
@@ -57,7 +58,7 @@ M.create_window = function()
     borderchars = borderchars,
   })
 
-  vim.api.nvim_buf_set_lines(bufnr, 0,0, false, { center([[Question:]] .. q_query) })
+  vim.api.nvim_buf_set_lines(bufnr, 0,0, false, { center([[Question]] .. "(" .. q_lang .. "):" .. q_query) })
   vim.cmd([[
     hi def link QuestionSubHeader CursorColumn
   ]])

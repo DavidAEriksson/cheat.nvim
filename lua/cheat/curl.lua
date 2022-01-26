@@ -16,7 +16,8 @@ M.get_query = function ()
   return query:gsub(" ", "+")
 end
 
-M.query = function(lang, lang_query)
+-- This should maybe take options for [Q] if we want questions or not
+M.query = function(lang, lang_query, q)
   local res = curl.get("https://cheat.sh/" .. lang .. "/" .. lang_query .. "\\?T")
   return res.body
 end
