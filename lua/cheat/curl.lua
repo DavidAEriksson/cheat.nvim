@@ -22,4 +22,10 @@ M.query = function(lang, lang_query, q)
   return res.body
 end
 
+-- TODO: implement this for another keybind
+M.learn = function(lang)
+  local res = curl.get("https://cheat.sh/" .. lang .. "/:learn")
+  return res.body
+end
+
 return M
