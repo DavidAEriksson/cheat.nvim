@@ -6,12 +6,23 @@ local curl = require 'cheat.curl'
 -- TODO: Redo this, should take function as parameter and load into window
 -- depending on what method was called.
 -- Or maybe have different M.method <- probably this one
-M.entry = function()
-  win.create_window()
+M.query= function()
+  print("Create a query")
+  local lang = curl.get_lang()
+  local query = curl.get_query()
+  local query_result = curl.query(lang, query)
+  local header = ([[Question]] .. "(" .. lang .. "):" .. query)
+  win.create_window(query_result, header)
 end
 
 M.learn = function()
-  print("from learn")
+  print("Learn a Language")
+  local lang = curl.get_lang()
+  local query_result = curl.learn(lang)
+  local header = ([[Learn: ]] .. "[" .. lang .. "]")
+
+  win.create_window(query_result, header)
+
   -- Kinda like this:
   -- local lang = curl.get_lang()
   -- win.create_window(lang)

@@ -39,13 +39,13 @@ local function window_opts()
 end
 
 
-M.create_window = function()
+M.create_window = function(query_result, header)
   -- maybe move these if we want to redraw the window at some point
   -- we maybe want to bind 'n' in buffer to call eg cht.sh/lua/query+string/{next_answer} and so on
   -- to get another answer
-  local q_lang = curl.get_lang()
-  local q_query = curl.get_query()
-  local query_result = curl.query(q_lang, q_query) -- TODO: question option from config
+  -- local q_lang = curl.get_lang()
+  -- local q_query = curl.get_query()
+  -- local query_result = curl.query(q_lang, q_query) -- TODO: question option from config
 
   local borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
   local bufnr = vim.api.nvim_create_buf(false, false)
@@ -60,9 +60,9 @@ M.create_window = function()
     borderchars = borderchars,
   })
 
-  vim.api.nvim_buf_set_lines(bufnr, 0,0, false, { center([[Question]] .. "(" .. q_lang .. "):" .. q_query) })
+  vim.api.nvim_buf_set_lines(bufnr, 0,0, false, { center(header) })
   vim.cmd([[
-    hi def link QuestionSubHeader DiagnosticInfo
+    hi def link QuestionSubHeader TSNote
   ]])
 
   vim.api.nvim_buf_add_highlight(bufnr, -1, 'QuestionSubHeader', 0, 0, -1)

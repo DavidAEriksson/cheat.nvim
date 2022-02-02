@@ -24,7 +24,7 @@ end
 
 -- TODO: implement this for another keybind
 M.learn = function(lang)
-  local res = curl.get("https://cheat.sh/" .. lang .. "/:learn")
+  local res = curl.get("cht.sh/" .. lang .. "/:learn" .. "\\?T")
   return res.body
 end
 
