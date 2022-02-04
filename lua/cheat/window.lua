@@ -1,4 +1,3 @@
-local curl = require('cheat.curl')
 local popup = require('plenary.popup')
 
 local M = {}
@@ -40,13 +39,6 @@ end
 
 
 M.create_window = function(query_result, header)
-  -- maybe move these if we want to redraw the window at some point
-  -- we maybe want to bind 'n' in buffer to call eg cht.sh/lua/query+string/{next_answer} and so on
-  -- to get another answer
-  -- local q_lang = curl.get_lang()
-  -- local q_query = curl.get_query()
-  -- local query_result = curl.query(q_lang, q_query) -- TODO: question option from config
-
   local borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
   local bufnr = vim.api.nvim_create_buf(false, false)
 
