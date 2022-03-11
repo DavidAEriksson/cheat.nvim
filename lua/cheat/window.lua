@@ -54,7 +54,7 @@ M.create_window = function(query_result, header)
 
   vim.api.nvim_buf_set_lines(bufnr, 0,0, false, { center(header) })
   vim.cmd([[
-    hi def link QuestionSubHeader TSNote
+    hi def link QuestionSubHeader TSTag
   ]])
 
   vim.api.nvim_buf_add_highlight(bufnr, -1, 'QuestionSubHeader', 0, 0, -1)
